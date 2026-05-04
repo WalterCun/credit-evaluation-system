@@ -1,0 +1,47 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: creditdb
+      POSTGRES_USER: credituser
+      POSTGRES_PASSWORD: creditpass
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  risk-service:
+    build: ./risk-service
+    ports:
+      - "8081:8080"
+      - "9000:9000"
+    depends_on:
+      - postgres
+
+  orchestrator-service:
+    build: ./orchestrator-service
+    ports:
+      - "8080:8080"
+    environment:
+      QUARKUS_DATASOURCE_REACTIVE_URL: postgresql://postgres:5432/creditdb
+      QUARKUS_DATASOURCE_USERNAME: credituser
+      QUARKUS_DATASOURCE_PASSWORD: creditpass
+      QUARKUS_GRPC_CLIENTS_RISK_SERVICE_HOST: risk-service
+      QUARKUS_GRPC_CLIENTS_RISK_SERVICE_PORT: "9000"
+    depends_on:
+      - postgres
+      - risk-service
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: http://orchestrator-service:8080
+    ports:
+      - "5173:5173"
+    depends_on:
+      - orchestrator-service
+
+volumes:
+  pgdata:
