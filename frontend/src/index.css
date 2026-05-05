@@ -2,6 +2,57 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply bg-gray-50 text-gray-900 antialiased;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@layer base {
+  body {
+    @apply bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 text-gray-900 antialiased font-sans min-h-screen;
+  }
+}
+
+@layer components {
+  .input-field {
+    @apply block w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm
+           shadow-sm transition-all duration-200
+           placeholder:text-gray-400
+           hover:border-gray-400
+           focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none;
+  }
+
+  .input-field-error {
+    @apply border-red-400 hover:border-red-500 focus:border-red-500 focus:ring-red-500/20;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-3
+           text-sm font-semibold text-white shadow-sm shadow-blue-600/25
+           transition-all duration-200
+           hover:bg-blue-700 hover:shadow-md hover:shadow-blue-600/30
+           active:scale-[0.98] active:shadow-sm
+           disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-600 disabled:hover:shadow-sm;
+  }
+
+  .card {
+    @apply rounded-2xl bg-white/80 backdrop-blur-sm shadow-lg shadow-gray-200/50 border border-white/60;
+  }
+}
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.4s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 }
