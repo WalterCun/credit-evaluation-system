@@ -1,0 +1,8 @@
+target
+.mvn
+.git
+.opencode
+*.md
+*.class
+.idea
+*.iml
