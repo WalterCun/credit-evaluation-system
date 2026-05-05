@@ -1,7 +1,20 @@
+/**
+ * Componente raíz de la aplicación Credit Evaluation System.
+ *
+ * Estructura de la UI:
+ *   - Header sticky con título y descripción.
+ *   - CreditForm: formulario para crear nuevas evaluaciones.
+ *   - EvaluationList: tabla/historial de evaluaciones previas.
+ *   - Footer con copyright dinámico.
+ *
+ * Usa QueryClientProvider de @tanstack/react-query para gestión
+ * de estado asíncrono (caching, invalidación, reintentos).
+ */
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import CreditForm from "./components/CreditForm";
 import EvaluationList from "./components/EvaluationList";
 
+/** Instancia singleton de QueryClient para toda la aplicación. */
 const queryClient = new QueryClient();
 
 export default function App() {

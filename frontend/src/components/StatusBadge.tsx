@@ -1,3 +1,9 @@
+/**
+ * Componente StatusBadge - Badge visual que indica el estado de una evaluación crediticia.
+ *
+ * Muestra "APROBADO" en verde con ícono de check o "RECHAZADO" en rojo con ícono de X.
+ * Se utiliza en la tabla de historial y en las tarjetas móviles.
+ */
 export default function StatusBadge({ estado }: { estado: string }) {
   const isApproved = estado === "APROBADO";
 

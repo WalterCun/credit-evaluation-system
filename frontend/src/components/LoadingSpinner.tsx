@@ -1,3 +1,9 @@
+/**
+ * Componente LoadingSpinner - Indicador de carga animado.
+ *
+ * Se muestra mientras se están obteniendo las evaluaciones del backend.
+ * Utiliza una animación CSS de rotación sobre un círculo con borde parcial.
+ */
 export default function LoadingSpinner() {
   return (
     <div className="card animate-fade-in p-8">

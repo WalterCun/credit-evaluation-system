@@ -1,3 +1,22 @@
+/**
+ * Componente CreditForm - Formulario principal para crear evaluaciones crediticias.
+ *
+ * Flujo de usuario:
+ *   1. Ingresa cédula ecuatoriana (10 dígitos, validación en tiempo real con Módulo 10).
+ *   2. Ingresa monto solicitado y salario mensual (formato numérico con formateo en blur).
+ *   3. Ingresa plazo del crédito en años.
+ *   4. Presiona "Evaluar Crédito" para enviar la solicitud al backend.
+ *   5. Muestra el resultado (APROBADO/RECHAZADO) con score y deuda mensual calculada.
+ *
+ * Características:
+ *   - Validación con Zod + react-hook-form (schema declarativo).
+ *   - Validación en tiempo real de cédula ecuatoriana (barra de progreso + ícono de validez).
+ *   - Formateo de moneda al perder foco y restauración de número al ganar foco.
+ *   - Sanitización de inputs numéricos (elimina no-dígitos, limita longitud).
+ *   - Botón de submit deshabilitado si hay errores o campos incompletos.
+ *   - Feedback visual de éxito (verde) o error (rojo) tras la mutación.
+ *   - Al crear exitosamente, el formulario se resetea y la lista se refresca automáticamente.
+ */
 import { useEffect, useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,6 +32,7 @@ import {
 
 const { MONTO, SALARIO, PLAZO } = VALIDATION_LIMITS;
 
+/** Schema Zod que define las reglas de validación para el formulario. */
 const schema = z.object({
   cedula: z
     .string()

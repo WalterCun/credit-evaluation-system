@@ -1,3 +1,16 @@
+/**
+ * Componente EvaluationList - Muestra el historial de evaluaciones crediticias.
+ *
+ * Obtiene las evaluaciones del backend usando useEvaluations() y las presenta en:
+ *   - Tabla desktop (pantallas >= sm): columnas para cédula, monto, salario, score, deuda, estado y fecha.
+ *   - Tarjetas móviles (pantallas < sm): layout en grid con los mismos datos adaptados.
+ *
+ * Estados manejados:
+ *   - Cargando: muestra LoadingSpinner.
+ *   - Error: muestra mensaje descriptivo (error de red, 404, 500, etc.).
+ *   - Vacío: muestra mensaje indicando que no hay evaluaciones.
+ *   - Con datos: renderiza la tabla/tarjetas con StatusBadge por cada evaluación.
+ */
 import { useEvaluations } from "../hooks/useCreditEvaluation";
 import StatusBadge from "./StatusBadge";
 import LoadingSpinner from "./LoadingSpinner";
@@ -7,6 +20,7 @@ import { isAxiosError } from "axios";
 export default function EvaluationList() {
   const { data, isLoading, isError, error } = useEvaluations();
 
+  /** Genera un mensaje de error descriptivo según el tipo de error de Axios. */
   const getErrorMessage = () => {
     if (isAxiosError(error)) {
       if (error.code === "ERR_NETWORK" || !error.response) {
