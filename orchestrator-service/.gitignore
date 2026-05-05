@@ -1,11 +1,5 @@
-target/
-*.log
-.env
-*.swp
-*.swo
-*~
-
 # Maven
+target/
 .pom.xml.versionsBackup
 .releaseBackup
 release.properties
@@ -21,6 +15,21 @@ buildNumber.properties
 .project
 .settings/
 .vscode/
+*.swp
+*.swo
+*~
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
 
 # Test output
 surefire-reports/
