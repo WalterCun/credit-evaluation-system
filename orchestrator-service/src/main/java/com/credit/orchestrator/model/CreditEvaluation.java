@@ -10,6 +10,25 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
+/**
+ * Entidad JPA que mapea la tabla "credit_evaluations" en PostgreSQL.
+ *
+ * Representa una evaluación crediticia persistida. Los campos corresponden
+ * a las columnas definidas en postgres/init.sql:
+ *
+ *   id              - PK auto-incremental (BIGSERIAL)
+ *   cedula          - Cédula ecuatoriana (VARCHAR 10)
+ *   monto_solicitado - Monto del crédito en USD (DECIMAL 12,2)
+ *   salario         - Salario mensual en USD (DECIMAL 12,2)
+ *   tiempo_anios    - Plazo del crédito en años (INTEGER)
+ *   score           - Score de riesgo calculado por risk-service (INTEGER, 1-100)
+ *   deuda_mensual   - Suma de mensualidades de deudas existentes (DECIMAL 12,2)
+ *   estado          - Resultado: "APROBADO" o "RECHAZADO" (VARCHAR 20)
+ *   fecha_evaluacion - Timestamp con zona horaria de la evaluación
+ *
+ * Extiende PanacheEntityBase para operaciones reactivas de persistencia
+ * (persistAndFlush, listAll, etc.) con Mutiny.
+ */
 @Entity
 @Table(name = "credit_evaluations")
 public class CreditEvaluation extends PanacheEntityBase {

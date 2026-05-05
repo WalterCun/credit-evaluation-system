@@ -3,6 +3,26 @@ package com.credit.orchestrator.model;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
+/**
+ * DTO de salida con el resultado completo de una evaluación crediticia.
+ *
+ * Se serializa como JSON en las respuestas del API REST.
+ * Incluye todos los datos de la solicitud más los resultados del análisis:
+ * score, deuda mensual, estado y fecha de evaluación.
+ *
+ * Ejemplo JSON de respuesta:
+ *   {
+ *     "id": 1,
+ *     "cedula": "1712345678",
+ *     "montoSolicitado": 10000.00,
+ *     "salario": 5000.00,
+ *     "tiempoAnios": 3,
+ *     "score": 75,
+ *     "deudaMensual": 850.50,
+ *     "estado": "APROBADO",
+ *     "fechaEvaluacion": "2026-05-05T10:30:00+00:00"
+ *   }
+ */
 public class EvaluationResult {
     private Long id;
     private String cedula;
@@ -33,6 +53,10 @@ public class EvaluationResult {
     public OffsetDateTime getFechaEvaluacion() { return fechaEvaluacion; }
     public void setFechaEvaluacion(OffsetDateTime fechaEvaluacion) { this.fechaEvaluacion = fechaEvaluacion; }
 
+    /**
+     * Factory method que convierte la entidad JPA CreditEvaluation en el DTO EvaluationResult.
+     * Separa la capa de persistencia de la capa de presentación REST.
+     */
     public static EvaluationResult fromEntity(CreditEvaluation e) {
         EvaluationResult r = new EvaluationResult();
         r.setId(e.getId());
