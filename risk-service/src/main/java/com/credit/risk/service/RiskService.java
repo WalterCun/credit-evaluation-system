@@ -17,15 +17,14 @@ public class RiskService {
     };
 
     public List<DebtInfo> generateDebts(String cedula) {
-        int seed = cedula.hashCode();
-        var seededRandom = new java.util.Random(seed);
-        int count = 1 + seededRandom.nextInt(5);
+        var random = ThreadLocalRandom.current();
+        int count = 1 + random.nextInt(5);
         List<DebtInfo> debts = new ArrayList<>();
 
         for (int i = 0; i < count; i++) {
-            double monto = Math.round((500 + seededRandom.nextDouble() * 9500) * 100.0) / 100.0;
-            double mensualidad = Math.round(monto * (0.05 + seededRandom.nextDouble() * 0.10) * 100.0) / 100.0;
-            String entidad = ENTIDADES[seededRandom.nextInt(ENTIDADES.length)];
+            double monto = Math.round((500 + random.nextDouble() * 9500) * 100.0) / 100.0;
+            double mensualidad = Math.round(monto * (0.05 + random.nextDouble() * 0.10) * 100.0) / 100.0;
+            String entidad = ENTIDADES[random.nextInt(ENTIDADES.length)];
 
             DebtInfo debt = DebtInfo.newBuilder()
                 .setCedula(cedula)

@@ -3,10 +3,10 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 # Copy package files first for better layer caching
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml .npmrc ./
 
-# Install dependencies
-RUN npm install -g pnpm && pnpm install --frozen-lockfile
+# Install pnpm (pinned version for reproducibility)
+RUN npm install -g pnpm@10.33.0 && pnpm install --frozen-lockfile
 
 # Copy all necessary files for build
 COPY vite.config.ts tsconfig.json ./
@@ -14,8 +14,6 @@ COPY tailwind.config.js postcss.config.js ./
 COPY index.html ./
 COPY src ./src
 
-# Copy public directory if it exists (optional)
-COPY public ./public 2>/dev/null || echo "No public directory to copy"
 
 # Build environment variables (can be overridden at build time)
 ARG VITE_API_URL
