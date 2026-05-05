@@ -27,7 +27,7 @@ public class CreditEvaluationService {
     @WithTransaction
     public Uni<EvaluationResult> evaluate(EvaluationRequest request) {
         LOG.debugv("Iniciando evaluación para cedula={0}", request.getCedula());
-        Uni<RiskScoreResponse> scoreUni = riskClient.getScore(request.getCedula());
+        Uni<RiskScoreResponse> scoreUni = riskClient.getScore(request);
         Uni<List<DebtInfo>> debtsUni = riskClient.getDebts(request.getCedula());
 
         return Uni.combine().all().unis(scoreUni, debtsUni).asTuple()
