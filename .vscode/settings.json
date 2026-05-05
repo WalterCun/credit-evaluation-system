@@ -1,0 +1,8 @@
+{
+  "java.server.launchMode": "Standard",
+  "java.configuration.maven.userSettings": ".mvn/settings.xml",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  }
+}
