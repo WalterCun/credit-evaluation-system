@@ -2,46 +2,65 @@ services:
   postgres:
     image: postgres:16-alpine
     environment:
-      POSTGRES_DB: creditdb
-      POSTGRES_USER: credituser
-      POSTGRES_PASSWORD: creditpass
+      POSTGRES_DB: ${POSTGRES_DB:-creditdb}
+      POSTGRES_USER: ${POSTGRES_USER:-credituser}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-creditpass}
     ports:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - credit-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-credituser} -d ${POSTGRES_DB:-creditdb}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
 
   risk-service:
     build: ./risk-service
     ports:
-      - "8081:8080"
+      - "8081:8081"
       - "9000:9000"
-    depends_on:
-      - postgres
+    networks:
+      - credit-net
 
   orchestrator-service:
     build: ./orchestrator-service
     ports:
       - "8080:8080"
     environment:
-      QUARKUS_DATASOURCE_REACTIVE_URL: postgresql://postgres:5432/creditdb
-      QUARKUS_DATASOURCE_USERNAME: credituser
-      QUARKUS_DATASOURCE_PASSWORD: creditpass
+      QUARKUS_DATASOURCE_REACTIVE_URL: postgresql://postgres:5432/${POSTGRES_DB:-creditdb}
+      QUARKUS_DATASOURCE_USERNAME: ${POSTGRES_USER:-credituser}
+      QUARKUS_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-creditpass}
       QUARKUS_GRPC_CLIENTS_RISK_SERVICE_HOST: risk-service
       QUARKUS_GRPC_CLIENTS_RISK_SERVICE_PORT: "9000"
+    networks:
+      - credit-net
     depends_on:
-      - postgres
-      - risk-service
+      postgres:
+        condition: service_healthy
+      risk-service:
+        condition: service_started
 
   frontend:
     build:
       context: ./frontend
       args:
-        VITE_API_URL: http://orchestrator-service:8080
+        VITE_API_URL: ""
     ports:
       - "5173:80"
+    networks:
+      - credit-net
     depends_on:
-      - orchestrator-service
+      orchestrator-service:
+        condition: service_started
 
 volumes:
   pgdata:
+
+networks:
+  credit-net:
+    driver: bridge
