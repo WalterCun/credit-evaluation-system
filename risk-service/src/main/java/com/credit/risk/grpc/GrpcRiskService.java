@@ -1,7 +1,6 @@
 package com.credit.risk.grpc;
 
 import java.time.Duration;
-import java.util.concurrent.ThreadLocalRandom;
 
 import com.credit.risk.service.RiskService;
 
@@ -20,16 +19,21 @@ public class GrpcRiskService implements RiskGrpc {
     @Override
     public Uni<RiskScoreResponse> getScore(RiskRequest request) {
         String cedula = request.getCedula();
-        LOG.infov("gRPC GetScore cedula={0}", cedula);
+        double montoSolicitado = request.getMontoSolicitado();
+        double salario = request.getSalario();
+        int tiempoAnios = request.getTiempoAnios();
 
-        int score = ThreadLocalRandom.current().nextInt(0, 101);
+        LOG.infov("gRPC GetScore cedula={0} monto={1} salario={2} plazo={3}",
+            cedula, montoSolicitado, salario, tiempoAnios);
+
+        int score = riskService.calculateScore(cedula, montoSolicitado, salario, tiempoAnios);
         LOG.infov("Score calculado cedula={0} score={1}", cedula, score);
 
         return Uni.createFrom().item(
-                RiskScoreResponse.newBuilder()
-                        .setCedula(cedula)
-                        .setScore(score)
-                        .build()
+            RiskScoreResponse.newBuilder()
+                .setCedula(cedula)
+                .setScore(score)
+                .build()
         ).onItem().delayIt().by(Duration.ofMillis(2000));
     }
 
@@ -39,15 +43,15 @@ public class GrpcRiskService implements RiskGrpc {
         LOG.infov("gRPC GetDebts cedula={0}", cedula);
 
         return Uni.createFrom().item(cedula)
-                .onItem().delayIt().by(Duration.ofMillis(1500))
-                .map(c -> {
-                    var debts = riskService.generateDebts(c);
-                    DebtsResponse.Builder responseBuilder = DebtsResponse.newBuilder();
-                    for (var debt : debts) {
-                        responseBuilder.addDebts(debt);
-                    }
-                    LOG.infov("Deudas generadas cedula={0} cantidad={1}", c, debts.size());
-                    return responseBuilder.build();
-                });
+            .onItem().delayIt().by(Duration.ofMillis(1500))
+            .map(c -> {
+                var debts = riskService.generateDebts(c);
+                DebtsResponse.Builder responseBuilder = DebtsResponse.newBuilder();
+                for (var debt : debts) {
+                    responseBuilder.addDebts(debt);
+                }
+                LOG.infov("Deudas generadas cedula={0} cantidad={1}", c, debts.size());
+                return responseBuilder.build();
+            });
     }
 }

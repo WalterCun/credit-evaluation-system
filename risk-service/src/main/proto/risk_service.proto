@@ -7,6 +7,9 @@ option java_multiple_files = true;
 
 message RiskRequest {
   string cedula = 1;
+  double monto_solicitado = 2;
+  double salario = 3;
+  int32 tiempo_anios = 4;
 }
 
 message RiskScoreResponse {
