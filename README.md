@@ -5,19 +5,20 @@ Sistema de evaluación de crédito - Microservicios arquitectura distribuida
 ## 🚨 Arranque de Servicios (Docker - Recomendado)
 
 ```bash
-# 1. Iniciar todos los servicios
-docker-compose up -d
+# 1. Construir e iniciar todos los servicios
+docker compose up -d --build
 
 # 2. Verificar que todo esté corriendo
-docker-compose ps
+docker compose ps
 
 # 3. Ver logs en tiempo real
-docker-compose logs -f
+docker compose logs -f
 
 # 4. Acceder a la aplicación
 # Frontend: http://localhost:5173
 # Orchestrator API: http://localhost:8080
-# Risk Service: http://localhost:8081
+# Risk Service (HTTP): http://localhost:8081
+# Risk Service (gRPC): localhost:9000
 ```
 
 ## 🛠️ Ejecución Local (Sin Docker)

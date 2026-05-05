@@ -11,7 +11,7 @@ import jakarta.inject.Inject;
 import org.jboss.logging.Logger;
 
 @GrpcService
-public class GrpcRiskService implements MutinyRiskGrpc {
+public class GrpcRiskService implements RiskGrpc {
     private static final Logger LOG = Logger.getLogger(GrpcRiskService.class);
 
     @Inject

@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.credit.risk.grpc.DebtInfo;
 import com.credit.risk.grpc.DebtsResponse;
-import com.credit.risk.grpc.MutinyRiskGrpc;
+import com.credit.risk.grpc.RiskGrpc;
 import com.credit.risk.grpc.RiskRequest;
 import com.credit.risk.grpc.RiskScoreResponse;
 
@@ -15,8 +15,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class RiskClient {
 
-    @GrpcClient("risk-service")
-    MutinyRiskGrpc grpcStub;
+@GrpcClient("risk-service")
+RiskGrpc grpcStub;
 
     public Uni<RiskScoreResponse> getScore(String cedula) {
         return grpcStub.getScore(RiskRequest.newBuilder().setCedula(cedula).build());

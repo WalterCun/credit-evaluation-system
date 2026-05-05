@@ -67,6 +67,7 @@ public class CreditEvaluationService {
                 });
     }
 
+    @WithTransaction
     public Uni<List<EvaluationResult>> listAll() {
         LOG.debug("Consultando historial de evaluaciones");
         return CreditEvaluation.<CreditEvaluation>listAll()
