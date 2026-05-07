@@ -18,14 +18,16 @@ import jakarta.enterprise.context.ApplicationScoped;
  *    La simulación genera entre 1 y 5 deudas con entidades financieras ecuatorianas,
  *    montos entre $500 y $10,000, y mensualidades calculadas como porcentaje del monto.
  *
- * 2. calculateScore(cedula, monto, salario, plazo): Calcula el score de riesgo (1-100).
- *    El score se compone de 4 factores:
- *      a) Puntos por endeudamiento (0-40 pts): ratio deuda_mensual / límite_endeudamiento.
- *      b) Puntos por cuota (0-30 pts): ratio cuota_mensual / salario.
- *      c) Puntos por carga de deudas (0-15 pts): basado en cantidad de deudas activas.
- *      d) Variante aleatoria (1-15 pts): simula factores no modelados.
+* 2. calculateScore(cedula, monto, salario, plazo): Calcula el score de riesgo (1-100).
+ * Modo dual:
+ * a) Solo cédula (params null): retorna score aleatorio 1-100, sin consultar deudas.
+ * b) Todos los parámetros: cálculo completo basado en 4 factores de riesgo:
+ * - Puntos por endeudamiento (0-40 pts): ratio deuda_mensual / límite_endeudamiento.
+ * - Puntos por cuota (0-30 pts): ratio cuota_mensual / salario.
+ * - Puntos por carga de deudas (0-15 pts): basado en cantidad de deudas activas.
+ * - Variante aleatoria (1-15 pts): simula factores no modelados.
  *
- *    Score total = ptsEndeudamiento + ptsCuota + ptsCarga + ptsVariante (clamp 1-100).
+ * Score total = ptsEndeudamiento + ptsCuota + ptsCarga + ptsVariante (clamp 1-100).
  *
  * Tabla de puntos por endeudamiento:
  *   ratio ≤ 0.30 → 40 pts  (bajo endeudamiento)
