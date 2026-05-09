@@ -14,10 +14,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("CreditRequestValidator Tests")
 class CreditRequestValidatorTest {
 
+    private CreditRequestValidator validator;
     private EvaluationRequest validRequest;
 
     @BeforeEach
     void setUp() {
+        validator = new CreditRequestValidator();
         validRequest = new EvaluationRequest();
         // Use a valid cédula: 0102345675 (province 01, valid checksum)
         validRequest.setCedula("0102345675");
@@ -34,7 +36,7 @@ class CreditRequestValidatorTest {
         @DisplayName("Should return empty list for valid request")
         void shouldReturnEmptyListForValidRequest() {
             // When
-            List<String> errors = CreditRequestValidator.validate(validRequest);
+            List<String> errors = validator.validate(validRequest);
 
             // Then
             assertTrue(errors.isEmpty(), "Valid request should have no errors");
@@ -47,7 +49,7 @@ class CreditRequestValidatorTest {
             validRequest.setTiempoAnios(1);
 
             // When
-            List<String> errors = CreditRequestValidator.validate(validRequest);
+            List<String> errors = validator.validate(validRequest);
 
             // Then
             assertTrue(errors.isEmpty());
@@ -60,7 +62,7 @@ class CreditRequestValidatorTest {
             validRequest.setTiempoAnios(30);
 
             // When
-            List<String> errors = CreditRequestValidator.validate(validRequest);
+            List<String> errors = validator.validate(validRequest);
 
             // Then
             assertTrue(errors.isEmpty());
@@ -78,7 +80,7 @@ class CreditRequestValidatorTest {
             validRequest.setCedula(null);
 
             // When
-            List<String> errors = CreditRequestValidator.validate(validRequest);
+            List<String> errors = validator.validate(validRequest);
 
             // Then
             assertEquals(1, errors.size());
@@ -92,7 +94,7 @@ class CreditRequestValidatorTest {
             validRequest.setCedula("1234567890");
 
             // When
-            List<String> errors = CreditRequestValidator.validate(validRequest);
+            List<String> errors = validator.validate(validRequest);
 
             // Then
             assertTrue(errors.contains("Cédula ecuatoriana inválida (10 dígitos, módulo 10)"));
@@ -105,7 +107,7 @@ class CreditRequestValidatorTest {
             validRequest.setCedula("171234567");
 
             // When
-            List<String> errors = CreditRequestValidator.validate(validRequest);
+            List<String> errors = validator.validate(validRequest);
 
             // Then
             assertTrue(errors.contains("Cédula ecuatoriana inválida (10 dígitos, módulo 10)"));
@@ -123,7 +125,7 @@ class CreditRequestValidatorTest {
             validRequest.setMontoSolicitado(null);
 
             // When
-            List<String> errors = CreditRequestValidator.validate(validRequest);
+            List<String> errors = validator.validate(validRequest);
 
             // Then
             assertEquals(1, errors.size());
@@ -137,7 +139,7 @@ class CreditRequestValidatorTest {
             validRequest.setMontoSolicitado(BigDecimal.ZERO);
 
             // When
-            List<String> errors = CreditRequestValidator.validate(validRequest);
+            List<String> errors = validator.validate(validRequest);
 
             // Then
             assertTrue(errors.contains("El monto solicitado debe ser positivo"));
@@ -150,7 +152,7 @@ class CreditRequestValidatorTest {
             validRequest.setMontoSolicitado(new BigDecimal("-1000"));
 
             // When
-            List<String> errors = CreditRequestValidator.validate(validRequest);
+            List<String> errors = validator.validate(validRequest);
 
             // Then
             assertTrue(errors.contains("El monto solicitado debe ser positivo"));
@@ -168,7 +170,7 @@ class CreditRequestValidatorTest {
             validRequest.setSalario(null);
 
             // When
-            List<String> errors = CreditRequestValidator.validate(validRequest);
+            List<String> errors = validator.validate(validRequest);
 
             // Then
             assertEquals(1, errors.size());
@@ -182,7 +184,7 @@ class CreditRequestValidatorTest {
             validRequest.setSalario(BigDecimal.ZERO);
 
             // When
-            List<String> errors = CreditRequestValidator.validate(validRequest);
+            List<String> errors = validator.validate(validRequest);
 
             // Then
             assertTrue(errors.contains("El salario debe ser positivo"));
@@ -195,7 +197,7 @@ class CreditRequestValidatorTest {
             validRequest.setSalario(new BigDecimal("-5000"));
 
             // When
-            List<String> errors = CreditRequestValidator.validate(validRequest);
+            List<String> errors = validator.validate(validRequest);
 
             // Then
             assertTrue(errors.contains("El salario debe ser positivo"));
@@ -213,7 +215,7 @@ class CreditRequestValidatorTest {
             validRequest.setTiempoAnios(null);
 
             // When
-            List<String> errors = CreditRequestValidator.validate(validRequest);
+            List<String> errors = validator.validate(validRequest);
 
             // Then
             assertEquals(1, errors.size());
@@ -227,7 +229,7 @@ class CreditRequestValidatorTest {
             validRequest.setTiempoAnios(0);
 
             // When
-            List<String> errors = CreditRequestValidator.validate(validRequest);
+            List<String> errors = validator.validate(validRequest);
 
             // Then
             assertTrue(errors.contains("El tiempo debe estar entre 1 y 30 años"));
@@ -240,7 +242,7 @@ class CreditRequestValidatorTest {
             validRequest.setTiempoAnios(-5);
 
             // When
-            List<String> errors = CreditRequestValidator.validate(validRequest);
+            List<String> errors = validator.validate(validRequest);
 
             // Then
             assertTrue(errors.contains("El tiempo debe estar entre 1 y 30 años"));
@@ -253,7 +255,7 @@ class CreditRequestValidatorTest {
             validRequest.setTiempoAnios(35);
 
             // When
-            List<String> errors = CreditRequestValidator.validate(validRequest);
+            List<String> errors = validator.validate(validRequest);
 
             // Then
             assertTrue(errors.contains("El tiempo debe estar entre 1 y 30 años"));
@@ -271,7 +273,7 @@ class CreditRequestValidatorTest {
             EvaluationRequest invalidRequest = new EvaluationRequest();
 
             // When
-            List<String> errors = CreditRequestValidator.validate(invalidRequest);
+            List<String> errors = validator.validate(invalidRequest);
 
             // Then
             assertEquals(4, errors.size());
@@ -289,7 +291,7 @@ class CreditRequestValidatorTest {
             validRequest.setSalario(null);
 
             // When
-            List<String> errors = CreditRequestValidator.validate(validRequest);
+            List<String> errors = validator.validate(validRequest);
 
             // Then - cédula is valid, so only 2 errors expected
             assertEquals(2, errors.size());
